@@ -1,4 +1,8 @@
 # ZXDownLoadManager
+
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/zhouXiaoR/ZXDownLoadManager/blob/master/LICENSE)&nbsp;
+[![Support](https://img.shields.io/badge/support-iOS%206%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
+
 *  基于NSURLSession,文件下载，断点续传，支持多个文件同时下载.
 *  支持下载状态，进度，速度回调
 *  逻辑简洁，便于后续拓展
