@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69438E971F6C9E7E0060C2E7 /* DownTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69438E961F6C9E7E0060C2E7 /* DownTableViewController.m */; };
+		69438E9A1F6C9EE10060C2E7 /* DownTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 69438E991F6C9EE10060C2E7 /* DownTableViewCell.m */; };
+		69438E9D1F6CB6570060C2E7 /* DownFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 69438E9C1F6CB6570060C2E7 /* DownFileModel.m */; };
 		69761BB91F6A7A35006A4F9E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69761BB81F6A7A35006A4F9E /* main.m */; };
 		69761BBC1F6A7A35006A4F9E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69761BBB1F6A7A35006A4F9E /* AppDelegate.m */; };
 		69761BBF1F6A7A35006A4F9E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69761BBE1F6A7A35006A4F9E /* ViewController.m */; };
@@ -20,6 +23,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		69438E951F6C9E7E0060C2E7 /* DownTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownTableViewController.h; sourceTree = "<group>"; };
+		69438E961F6C9E7E0060C2E7 /* DownTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownTableViewController.m; sourceTree = "<group>"; };
+		69438E981F6C9EE10060C2E7 /* DownTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownTableViewCell.h; sourceTree = "<group>"; };
+		69438E991F6C9EE10060C2E7 /* DownTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownTableViewCell.m; sourceTree = "<group>"; };
+		69438E9B1F6CB6570060C2E7 /* DownFileModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownFileModel.h; sourceTree = "<group>"; };
+		69438E9C1F6CB6570060C2E7 /* DownFileModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownFileModel.m; sourceTree = "<group>"; };
 		69761BB41F6A7A35006A4F9E /* ZXDownLoadDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZXDownLoadDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69761BB81F6A7A35006A4F9E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		69761BBA1F6A7A35006A4F9E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -75,6 +84,12 @@
 				69761BBB1F6A7A35006A4F9E /* AppDelegate.m */,
 				69761BBD1F6A7A35006A4F9E /* ViewController.h */,
 				69761BBE1F6A7A35006A4F9E /* ViewController.m */,
+				69438E951F6C9E7E0060C2E7 /* DownTableViewController.h */,
+				69438E961F6C9E7E0060C2E7 /* DownTableViewController.m */,
+				69438E981F6C9EE10060C2E7 /* DownTableViewCell.h */,
+				69438E991F6C9EE10060C2E7 /* DownTableViewCell.m */,
+				69438E9B1F6CB6570060C2E7 /* DownFileModel.h */,
+				69438E9C1F6CB6570060C2E7 /* DownFileModel.m */,
 				69761BC01F6A7A35006A4F9E /* Main.storyboard */,
 				69761BC31F6A7A35006A4F9E /* Assets.xcassets */,
 				69761BC51F6A7A35006A4F9E /* LaunchScreen.storyboard */,
@@ -138,7 +153,7 @@
 				TargetAttributes = {
 					69761BB31F6A7A35006A4F9E = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 679CU7MYWL;
+						DevelopmentTeam = L9VBV3G9NX;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -180,10 +195,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				69761BD41F6A7ABC006A4F9E /* ZXDownLoadManager.m in Sources */,
+				69438E9D1F6CB6570060C2E7 /* DownFileModel.m in Sources */,
 				69761BBF1F6A7A35006A4F9E /* ViewController.m in Sources */,
 				69761BBC1F6A7A35006A4F9E /* AppDelegate.m in Sources */,
+				69438E971F6C9E7E0060C2E7 /* DownTableViewController.m in Sources */,
 				69761BD71F6A7ACE006A4F9E /* ZXFileTools.m in Sources */,
 				69761BD11F6A7AA7006A4F9E /* ZXDownLoader.m in Sources */,
+				69438E9A1F6C9EE10060C2E7 /* DownTableViewCell.m in Sources */,
 				69761BB91F6A7A35006A4F9E /* main.m in Sources */,
 				6987B8351F6BD08A006CA81F /* NSString+MD5.m in Sources */,
 			);
@@ -307,7 +325,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 679CU7MYWL;
+				DEVELOPMENT_TEAM = L9VBV3G9NX;
 				INFOPLIST_FILE = ZXDownLoadDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mopote.ZXDownLoadDemo;
@@ -319,7 +337,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 679CU7MYWL;
+				DEVELOPMENT_TEAM = L9VBV3G9NX;
 				INFOPLIST_FILE = ZXDownLoadDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mopote.ZXDownLoadDemo;

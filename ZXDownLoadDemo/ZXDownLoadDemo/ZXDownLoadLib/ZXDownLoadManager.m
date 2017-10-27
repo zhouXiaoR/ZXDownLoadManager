@@ -49,10 +49,10 @@ static ZXDownLoadManager * _downloadManager = nil;
     return [self downloaderExistsArray:md5URLKey];
 }
 
-- (void)zx_downLoadWithURL:(NSURL *)URL downloadStateChange:(ZXDownLoadStateChangeBlock)stateChange progressBlock:(ZXProgressCompleBlock)progress successed:(ZXDownFinishedBlock)success failed:(ZXDownFailedBlock)failed{
+- (ZXDownLoader*)zx_downLoadWithURL:(NSURL *)URL downloadStateChange:(ZXDownLoadStateChangeBlock)stateChange progressBlock:(ZXProgressCompleBlock)progress successed:(ZXDownFinishedBlock)success failed:(ZXDownFailedBlock)failed{
     
     if (URL.absoluteString.length <= 0) {
-        return;
+        return nil;
     }
     
     NSString * md5URLKey = [URL.absoluteString md5String];
@@ -61,7 +61,7 @@ static ZXDownLoadManager * _downloadManager = nil;
     ZXDownLoader *orginDownloader = [self downloaderExistsArray:md5URLKey];
     if (orginDownloader) {
         [orginDownloader zx_resumeCurrentTask];
-        return;
+        return orginDownloader;
     }
     
     // 2. 任务不存在，重新创建，并添加任务数组
@@ -75,14 +75,16 @@ static ZXDownLoadManager * _downloadManager = nil;
         }
         [weakSelf removeDownloader:URL];
     } failed:^(ZXDownFailedErrorCode code) {
+         [weakSelf removeDownloader:URL];
         if (failed) {
              failed(code);
         }
-        [weakSelf removeDownloader:URL];
+       
     }];
     
     NSDictionary *downloadDic = @{md5URLKey:downloader};
     [self.downLoadersArray addObject:downloadDic];
+    return downloader;
 }
 
 - (ZXDownLoader *)downloaderExistsArray:(NSString *)md5URL{
@@ -90,8 +92,8 @@ static ZXDownLoadManager * _downloadManager = nil;
     [self.downLoadersArray enumerateObjectsUsingBlock:^(NSDictionary *downloaderDic, NSUInteger index, BOOL * _Nonnull stop) {
         NSString * md5URLKey = downloaderDic.allKeys.firstObject;
         if ([md5URLKey isEqualToString:md5URL]) {
+             downloader = downloaderDic.allValues.firstObject;
             *stop = YES;
-            downloader = downloaderDic.allValues.firstObject;
         }
     }];
     return downloader;
@@ -126,18 +128,28 @@ static ZXDownLoadManager * _downloadManager = nil;
     }];
 }
 
+- (void)cancelCleanAllTask{
+    [self.downLoadersArray enumerateObjectsUsingBlock:^(NSDictionary* downloaderDic, NSUInteger idx, BOOL * _Nonnull stop) {
+        ZXDownLoader *downloader = downloaderDic.allValues.firstObject;
+        [downloader zx_cancelTaskCleanDisk];
+    }];
+    [self.downLoadersArray removeAllObjects];
+}
+
 - (void)removeDownloader:(NSURL *)url{
     __block NSDictionary *tempDownloaderDic = nil;
     [self.downLoadersArray enumerateObjectsUsingBlock:^(NSDictionary *downloaderDic, NSUInteger index, BOOL * _Nonnull stop) {
         NSString * md5URLKey = downloaderDic.allKeys.firstObject;
         if ([md5URLKey isEqualToString:[url.absoluteString md5String]]) {
+            tempDownloaderDic = downloaderDic;
             *stop = YES;
-            tempDownloaderDic = tempDownloaderDic;
         }
     }];
 
     [self.downLoadersArray removeObject:tempDownloaderDic];
 }
+
+
 
 
 @end

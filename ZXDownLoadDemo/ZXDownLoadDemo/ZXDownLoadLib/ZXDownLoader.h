@@ -10,7 +10,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum : NSUInteger {
-    ZXDownloadStatePause = 0, //暂停
+    ZXDownloadStateNormal = 1,
+    ZXDownloadStatePause = 2, //暂停
     ZXDownloadStateDowning, //下载中
     ZXDownloadStateSuccess, //成功
     ZXDownloadStateFailed //失败
@@ -27,6 +28,7 @@ typedef void(^ZXDownFailedBlock)(ZXDownFailedErrorCode code);
 
 @interface ZXDownLoader : NSObject
 
+@property(nonatomic,strong,readonly)NSURL * task_URL;
 /**
  当前的下载进度
  */
@@ -36,6 +38,18 @@ typedef void(^ZXDownFailedBlock)(ZXDownFailedErrorCode code);
  当前的下载状态
  */
 @property(nonatomic,assign,readonly)ZXDownloadStateState task_state;
+
+/**
+ 文件总大小
+ */
+@property(nonatomic,assign,readonly)long long totalFileSize;
+
+/**
+ 文件已经下载的大小
+ */
+@property(nonatomic,assign,readonly)long long downLoadedFileSize;
+
+
 
 /**
  下载速度，单位b/s

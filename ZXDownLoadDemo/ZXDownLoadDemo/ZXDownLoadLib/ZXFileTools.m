@@ -54,4 +54,18 @@
    NSDictionary *fileInfo = [[NSFileManager defaultManager]attributesOfItemAtPath:path error:nil];
     return fileInfo.fileSize;
 }
+
++(void)deleteAllSubFilesPath:(NSString *)filePath{
+    BOOL isDireTory = NO;
+    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:filePath];
+    if([[NSFileManager defaultManager]fileExistsAtPath:path isDirectory:&isDireTory]){
+        if (isDireTory) {
+            NSDirectoryEnumerator *plistEnumerator = [[NSFileManager defaultManager] enumeratorAtPath:path];
+            for (NSString *fileName in plistEnumerator) {
+                [[NSFileManager defaultManager] removeItemAtPath:[path stringByAppendingPathComponent:fileName] error:nil];
+            }
+        }
+    }
+}
+
 @end

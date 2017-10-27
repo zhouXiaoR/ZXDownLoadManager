@@ -12,9 +12,6 @@
 NSTimeInterval const kDownloadingSpeedDuration = 1.5;
 
 @interface ZXDownLoader ()<NSURLSessionDataDelegate>{
-    long long        _totalFileSize;
-    long long        _downLoadedFileSize;
-    
     NSDate*         _lastDate;
     long long        _timeDurationTotalDownFileSize;
 }
@@ -68,17 +65,22 @@ NSString * dscPath(NSString *path){
     [self.session invalidateAndCancel];
     self.session = nil;
     _lastDate = nil;
+    self.task_URL = nil;
     _timeDurationTotalDownFileSize = 0;
-    self.task_state = ZXDownloadStatePause;
+    self.task_progress_value = 0;
+    self.task_downloading_speed = 0;
+    self.downLoadedFileSize = 0;
+    self.totalFileSize = 0;
+    self.task_state = ZXDownloadStateNormal;
 }
 
 - (void)zx_cancelTaskCleanDisk{
-    [self zx_cancelTask];
     if (self.task_state == ZXDownloadStateSuccess) {
         [ZXFileTools removeFile:self.finishDownPath];
     }else{
         [ZXFileTools removeFile:self.tempDownPath];
     }
+    [self zx_cancelTask];
 }
 
 - (void)zx_resumeCurrentTask{
@@ -96,6 +98,7 @@ NSString * dscPath(NSString *path){
     }
     return _session;
 }
+
 
 - (void)zx_downLoadWithURL:(NSURL *)URL downloadStateChange:(ZXDownLoadStateChangeBlock)stateChange progressBlock:(ZXProgressCompleBlock)progress successed:(ZXDownFinishedBlock)success failed:(ZXDownFailedBlock)failed{
     self.progressCompleteBlock = progress;
@@ -135,15 +138,16 @@ NSString * dscPath(NSString *path){
     [self zx_cancelTask];
     
     if ([ZXFileTools fileExist:self.tempDownPath]) {
-        _downLoadedFileSize = [ZXFileTools fileSize:self.tempDownPath];
+        self.downLoadedFileSize = [ZXFileTools fileSize:self.tempDownPath];
     }
     
-    [self downLoadURL:URL Offset:_downLoadedFileSize];
+    [self downLoadURL:URL Offset:self.downLoadedFileSize];
 }
 
 - (void)downLoadURL:(NSURL *)URL Offset:(long long)offSet{
+    self.task_URL = URL;
     NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:URL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:0];
-    [request setValue:[NSString stringWithFormat:@"byte=%lld-",_downLoadedFileSize] forHTTPHeaderField:@"Range"];
+    [request setValue:[NSString stringWithFormat:@"byte=%lld-",self.downLoadedFileSize] forHTTPHeaderField:@"Range"];
     self.dataTask = [self.session dataTaskWithRequest:request];
     [self zx_resumeCurrentTask];
 }
@@ -153,15 +157,15 @@ NSString * dscPath(NSString *path){
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
 didReceiveResponse:(NSHTTPURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler{
-    _totalFileSize =  response.expectedContentLength + _downLoadedFileSize;
-    if (_downLoadedFileSize > _totalFileSize) {
+    self.totalFileSize =  response.expectedContentLength + self.downLoadedFileSize;
+    if (self.downLoadedFileSize > self.totalFileSize) {
         [ZXFileTools removeFile:self.tempDownPath];
         completionHandler(NSURLSessionResponseCancel);
         [self zx_downLoadWithURL:response.URL];
         return;
     }
     
-    if (_downLoadedFileSize == _totalFileSize) {
+    if (self.downLoadedFileSize == self.totalFileSize) {
         [ZXFileTools moveFileFromPath:self.tempDownPath toPath:self.finishDownPath];
          completionHandler(NSURLSessionResponseCancel);
          self.task_state = ZXDownloadStateSuccess;
@@ -176,7 +180,7 @@ didReceiveResponse:(NSHTTPURLResponse *)response
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data{
     
-    _downLoadedFileSize += data.length;
+    self.downLoadedFileSize += data.length;
     
     [self caculatorDownloadSpeed:data.length];
     
@@ -201,7 +205,7 @@ didReceiveResponse:(NSHTTPURLResponse *)response
 }
 
 - (void)caculatorDownloadProgress{
-     self.task_progress_value = 1.0 * _downLoadedFileSize / _totalFileSize;
+     self.task_progress_value = 1.0 * self.downLoadedFileSize / self.totalFileSize;
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
@@ -211,9 +215,11 @@ didCompleteWithError:(nullable NSError *)error{
          self.task_state = ZXDownloadStateSuccess;
     }else{
         if (error.code == -999) {
-             self.task_state = ZXDownloadStatePause;
+             self.task_state = ZXDownloadStateNormal;
         }else{
+            
             self.task_state = ZXDownloadStateFailed;
+            NSLog(@"失败了----%@---%ld",error.localizedDescription,error.code);
             if (self.downFailedBlock) {
                 self.downFailedBlock(ZXDownFailedCodeNetError);
             }
@@ -230,7 +236,7 @@ didCompleteWithError:(nullable NSError *)error{
     _task_progress_value = task_progress_value;
     
     if (self.progressCompleteBlock) {
-        self.progressCompleteBlock(_totalFileSize,_downLoadedFileSize,task_progress_value,self.task_downloading_speed);
+        self.progressCompleteBlock(self.totalFileSize,self.downLoadedFileSize,task_progress_value,self.task_downloading_speed);
     }
 }
 
@@ -253,6 +259,18 @@ didCompleteWithError:(nullable NSError *)error{
 
 - (void)setTask_downloading_speed:(CGFloat)task_downloading_speed{
     _task_downloading_speed = task_downloading_speed;
+}
+
+-(void)setTotalFileSize:(long long)totalFileSize{
+    _totalFileSize = totalFileSize;
+}
+
+- (void)setDownLoadedFileSize:(long long)downLoadedFileSize{
+    _downLoadedFileSize = downLoadedFileSize;
+}
+
+-(void)setTask_URL:(NSURL *)task_URL{
+    _task_URL = task_URL;
 }
 
 

@@ -20,4 +20,6 @@
 
 +(long long)fileSize:(NSString *)path;
 
++(void)deleteAllSubFilesPath:(NSString *)filePath;
+
 @end

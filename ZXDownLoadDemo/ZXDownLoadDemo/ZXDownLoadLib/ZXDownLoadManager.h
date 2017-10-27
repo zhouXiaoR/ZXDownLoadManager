@@ -21,14 +21,6 @@
 - (void)zx_downLoadWithURL: (NSURL *)url;
 
 /**
- 根据URL返回对应的下载器
-
- @param url 唯一URL
- @return 下载器
- */
-- (ZXDownLoader *)zx_downLoaderWithURL: (NSURL *)url;
-
-/**
  下载任务
 
  @param URL 资源URL
@@ -37,7 +29,7 @@
  @param success 成功回调
  @param failed 失败回调
  */
-- (void)zx_downLoadWithURL:(NSURL *)URL downloadStateChange:(ZXDownLoadStateChangeBlock)stateChange progressBlock:(ZXProgressCompleBlock)progress successed:(ZXDownFinishedBlock)success failed:(ZXDownFailedBlock)failed;
+- (ZXDownLoader*)zx_downLoadWithURL:(NSURL *)URL downloadStateChange:(ZXDownLoadStateChangeBlock)stateChange progressBlock:(ZXProgressCompleBlock)progress successed:(ZXDownFinishedBlock)success failed:(ZXDownFailedBlock)failed;
 
 /**
  暂停任务
@@ -69,5 +61,18 @@
  开启所有下载任务
  */
 - (void)resumeAllDownloaders;
+
+/**
+ 取消所有的任务并删除缓存
+ */
+- (void)cancelCleanAllTask;
+
+/**
+ 根据URL返回对应的下载器
+ 
+ @param url 唯一URL
+ @return 下载器
+ */
+- (ZXDownLoader *)zx_downLoaderWithURL: (NSURL *)url;
 
 @end
