@@ -1,4 +1,4 @@
-###ZXDownLoadManager
+#ZXDownLoadManager
 
  *  基于NSURLSession,文件下载，断点续传，支持多个文件同时下载.
  *  支持下载状态，进度，速度回调
